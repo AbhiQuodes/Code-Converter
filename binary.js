@@ -39,7 +39,7 @@ let mode='dark';
  let headtext =document.querySelector('Header');
  let s_Icon=document.querySelector('.material-symbols-outlined');
  
-  cbton.addEventListener('click',(e)=>{
+  cbton.addEventListener('pointerdown',(e)=>{
     input_code= inTake.value;
     if(input_code == '')
     {
@@ -136,7 +136,7 @@ let mode='dark';
   })
 
 
-  switchmode.addEventListener('click',()=>{
+  switchmode.addEventListener('pointerdown',()=>{
     if(mode=='dark')
     {
       togglePos.classList.remove('toggleAop');
@@ -167,7 +167,7 @@ let mode='dark';
   })
 
 
-  ApearSidebar.addEventListener('click',()=>
+  ApearSidebar.addEventListener('pointerdown',()=>
   {
 
     if( s_barDiv.style.left== '-300px')
