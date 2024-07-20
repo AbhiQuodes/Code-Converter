@@ -4,6 +4,8 @@
 // done hexadecimal to decimal BigNumber
 //remaining dec to binOct and dec 2 hex BigNumber.
 
+// const { default: BigNumber } = require("bignumber.js");
+
 let input_code = 0.0001;
 let big10 = new BigNumber("10");
 
@@ -65,6 +67,8 @@ let mode='dark';
         }
   
         case 'Binary To Gray':{
+          input_code=new BigNumber(input_code);
+          input_code= (input_code.integerValue(BigNumber.ROUND_FLOOR)).toString();
           resultDisplay.innerHTML=`(${input_code})<sub>Binary</sub> = `+'('+binTograyM(input_code)+')<sub>Gray</sub>';
   
           break;
@@ -95,6 +99,8 @@ let mode='dark';
         }
   
         case 'Gray To Binary':{
+          input_code=new BigNumber(input_code);
+          input_code= (input_code.integerValue(BigNumber.ROUND_FLOOR)).toString();
           resultDisplay.innerHTML=`(${input_code})<sub> Gray  </sub> = `+'('+grayTobinM(input_code)+')<sub> Binary</sub>';
   
           break;
@@ -117,15 +123,34 @@ let mode='dark';
           resultDisplay.innerHTML=`(${input_code})<sub>8</sub> = `+'('+octTohexM(input_code)+')<sub>16</sub>';
           break;
         }
+
+
+        case 'Hexadecimal To Binary':{
+  
+          resultDisplay.innerHTML=`(${input_code})<sub>16</sub> = `+'('+hexTobinM(input_code)+')<sub>2</sub>';
+          break;
+        }
+  
+        case 'Hexadecimal To Decimal':{
+  
+          resultDisplay.innerHTML=`(${input_code})<sub>16</sub> = `+'('+hexTodecM(input_code)+')<sub>10</sub>';
+          break;
+        }
+  
+        case 'Hexadecimal To Octal':{
+  
+          resultDisplay.innerHTML=`(${input_code})<sub>16</sub> = `+'('+hexTooctM(input_code)+')<sub>8</sub>';
+          break;
+        }
   
         case "1's Complement":{
-          resultDisplay.innerHTML=`Code under process`;
+          resultDisplay.innerHTML=`One's Complement of (${input_code}) = `+'('+comp1s(input_code)+')';
           break;
         }
   
         case "2's Complement":{
   
-          resultDisplay.innerHTML=`Code under process`;
+          resultDisplay.innerHTML=`Two's Complement of (${input_code}) = `+'('+comp2s(input_code)+')';
           break;
         }
   
@@ -170,12 +195,12 @@ let mode='dark';
   ApearSidebar.addEventListener('pointerdown',()=>
   {
 
-    if( s_barDiv.style.left== '-300px')
+    if( s_barDiv.style.left == '0px')
     {
-      s_barDiv.style.left="0px";
+           s_barDiv.style.left="-300px";
     }
     else{
-      s_barDiv.style.left= '-300px';
+          s_barDiv.style.left= '0px';
     }
 
   })
@@ -556,11 +581,17 @@ function hex2dec(input_code) {
 
 function bin2gray(input_code) {
   resultCode = input_code[0];
-
+  // input_code=input_code.integerValue().toFixed(0);
+  
   for (i = 1; i < input_code.length; i++) {
     if (input_code[i] == input_code[i - 1]) {
       resultCode += "0";
-    } else {
+    }
+    else if( input_code[i] =='.')
+    {
+      break;
+    }
+     else {
       resultCode += "1";
     }
 
@@ -579,11 +610,16 @@ function bin2gray(input_code) {
 
 function gray2bin(input_code) {
   resultCode = input_code[0];
+  // input_code=input_code.integerValue().toFixed(0);
 
   for (i = 1; i < input_code.length; i++) {
     if (input_code[i] == resultCode[i - 1]) {
       resultCode += "0";
-    } else {
+    }
+    else if( input_code[i] =='.')
+      {
+        break;
+      } else {
       resultCode += "1";
     }
     //error check Validation step
@@ -946,5 +982,20 @@ function subTwoM(input1,input2)
   input1 = "10110";
   input2 = "01110";
   resultCode = bin_Sub2Comp(input1, input2);
+  return resultCode;
+}
+
+function comp1s(innput_code)
+{
+  
+  resultCode= complement(input_code);
+  return resultCode;
+}
+
+
+function comp2s(innput_code)
+{
+  resultCode= complement(input_code);
+  resultCode = add1toResult(resultCode);
   return resultCode;
 }
