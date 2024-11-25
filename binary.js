@@ -5,6 +5,47 @@
 //remaining dec to binOct and dec 2 hex BigNumber.
 
 // const { default: BigNumber } = require("bignumber.js");
+//copy from chatgpy
+let stepBox = document.getElementById("stepBox");
+let resultDetailBox = document.querySelector(".step-box");
+
+document.addEventListener("DOMContentLoaded", function() {
+  const detailedAnswerBtn = document.getElementById("detailedAnswerBtn");
+  const selectInput = document.getElementById("Inoperation");
+  const resultDetailBox = document.getElementById("resultBox");
+
+  // Initially hide the step-box
+  stepBox.style.display = 'none';
+
+  // When the dropdown selection changes
+  selectInput.addEventListener("change", function() {
+      // Show the Detailed Answer button and the step-box after selection
+      detailedAnswerBtn.style.display = 'block';
+  });
+
+  // Handle the click event for Detailed Answer button
+  detailedAnswerBtn.addEventListener("click", function() {
+      // Toggle the visibility of step-box
+      if (stepBox.style.display === 'none') {
+          stepBox.style.display = 'flex';
+          // Add some content to step-box
+          if(  stepBox.innerHTML == '')
+          {
+          stepBox.innerHTML = 'Detailed explanation goes here.';
+          }
+      } else {
+          stepBox.style.display = 'none';
+      }
+  });
+
+  // Optional: hide the Detailed Answer button when resultDetailBox is empty
+  resultDetailBox.addEventListener("input", function() {
+      if (resultDetailBox.innerHTML === '') {
+          detailedAnswerBtn.style.display = 'none';
+      }
+  });
+});
+
 
 let input_code = 0.0001;
 let big10 = new BigNumber("10");
@@ -20,6 +61,7 @@ let fpartA = [],
   j,
   k,
   f;
+  let step =0;
 
 let letter = "";
 let carry;
@@ -27,193 +69,220 @@ let base;
 let difference;
 let small_code = "",
   largeCode = "";
-let mode='dark';
+let mode = "dark";
 
-  let inTake =document.querySelector('#intake');
-  let cbton =document.querySelector('#cBotton');
-  let inOperation =document.querySelector('#Inoperation');
-  let resultDisplay =document.querySelector('#resultBox');
-  let switchmode = document.querySelector('#toggle');
-  let togglePos =document.querySelector('#TDesign');
-  let ApearSidebar =document.querySelector('#apear');
-  let s_barDiv =document.querySelector('#s_bar');
- let contmode =document.querySelector('#container');
- let headtext =document.querySelector('Header');
- let s_Icon=document.querySelector('.material-symbols-outlined');
- 
-  cbton.addEventListener('pointerdown',(e)=>{
-    input_code= inTake.value;
-    if(input_code == '')
-    {
-      
-    
-      resultDisplay.innerHTML="No Input"
+let inTake = document.querySelector("#intake");
+let cbton = document.querySelector("#cBotton");
+let inOperation = document.querySelector("#Inoperation");
+let resultDisplay = document.querySelector("#resultBox");
+let switchmode = document.querySelector("#toggle");
+let togglePos = document.querySelector("#TDesign");
+let ApearSidebar = document.querySelector("#apear");
+let s_barDiv = document.querySelector("#s_bar");
+let contmode = document.querySelector("#container");
+let headtext = document.querySelector("Header");
+let s_Icon = document.querySelector(".material-symbols-outlined");
 
-   
-    }
-    else {
-      switch(inOperation.value)
-      {
-        case "Binary To Decimal":{
-          resultDisplay.innerHTML=`(${input_code})<sub>2</sub> = `+'('+binToDecM(input_code)+')<sub>10</sub>';
-          
-          break;
-        }
-  
-        case 'Binary to Octal':{
-  
-          resultDisplay.innerHTML=`(${input_code})<sub>2</sub> = `+'('+binTooctM(input_code)+')<sub>8</sub>';
-          break;
-        }
-  
-        case 'Binary To Gray':{
-          input_code=new BigNumber(input_code);
-          input_code= (input_code.integerValue(BigNumber.ROUND_FLOOR)).toString();
-          resultDisplay.innerHTML=`(${input_code})<sub>Binary</sub> = `+'('+binTograyM(input_code)+')<sub>Gray</sub>';
-  
-          break;
-        }
-  
-        case 'Binary To Hexadecimal':{
-          resultDisplay.innerHTML=`(${input_code})<sub>2</sub> = `+'('+binTohexM(input_code)+')<sub>16</sub>';
-  
-          break;
-        }
-  
-        case 'Decimal To Binary':{
-  
-          resultDisplay.innerHTML=`(${input_code})<sub>10</sub> = `+'('+dec2binM(input_code)+')<sub>2</sub>';
-          break;
-        }
-  
-        case 'Decimal To Hexadecimal':{
-  
-          resultDisplay.innerHTML=`(${input_code})<sub>10</sub> = `+'('+decTohexM(input_code)+')<sub>16</sub>';
-          break;
-        }
-  
-        case 'Decimal To Octal':{
-  
-          resultDisplay.innerHTML=`(${input_code})<sub>10</sub> = `+'('+dec2octM(input_code)+')<sub>8</sub>';
-          break;
-        }
-  
-        case 'Gray To Binary':{
-          input_code=new BigNumber(input_code);
-          input_code= (input_code.integerValue(BigNumber.ROUND_FLOOR)).toString();
-          resultDisplay.innerHTML=`(${input_code})<sub> Gray  </sub> = `+'('+grayTobinM(input_code)+')<sub> Binary</sub>';
-  
-          break;
-        }
-  
-        case 'Octal To Binary':{
-  
-          resultDisplay.innerHTML=`(${input_code})<sub>8</sub> = `+'('+octTobinM(input_code)+')<sub>2</sub>';
-          break;
-        }
-  
-        case 'Octal To Decimal':{
-  
-          resultDisplay.innerHTML=`(${input_code})<sub>8</sub> = `+'('+octTodecM(input_code)+')<sub>2</sub>';
-          break;
-        }
-  
-        case 'Octal To Hexadecimal':{
-  
-          resultDisplay.innerHTML=`(${input_code})<sub>8</sub> = `+'('+octTohexM(input_code)+')<sub>16</sub>';
-          break;
-        }
+cbton.addEventListener("pointerdown", (e) => {
+  input_code = inTake.value;
+  // alert('yes');
 
+  if (input_code == "") {
+    resultDisplay.innerHTML = "No Input";
+  } else {
+    switch (inOperation.value) {
+      case "Binary To Decimal": {
+        resultDisplay.innerHTML =
+          `(${input_code})<sub>2</sub> = ` +
+          "(" +
+          binToDecM(input_code) +
+          ")<sub>10</sub>";
 
-        case 'Hexadecimal To Binary':{
-  
-          resultDisplay.innerHTML=`(${input_code})<sub>16</sub> = `+'('+hexTobinM(input_code)+')<sub>2</sub>';
-          break;
-        }
-  
-        case 'Hexadecimal To Decimal':{
-  
-          resultDisplay.innerHTML=`(${input_code})<sub>16</sub> = `+'('+hexTodecM(input_code)+')<sub>10</sub>';
-          break;
-        }
-  
-        case 'Hexadecimal To Octal':{
-  
-          resultDisplay.innerHTML=`(${input_code})<sub>16</sub> = `+'('+hexTooctM(input_code)+')<sub>8</sub>';
-          break;
-        }
-  
-        case "1's Complement":{
-          resultDisplay.innerHTML=`One's Complement of (${input_code}) = `+'('+comp1s(input_code)+')';
-          break;
-        }
-  
-        case "2's Complement":{
-  
-          resultDisplay.innerHTML=`Two's Complement of (${input_code}) = `+'('+comp2s(input_code)+')';
-          break;
-        }
-  
+        break;
+      }
+
+      case "Binary to Octal": {
+        resultDisplay.innerHTML =
+          `(${input_code})<sub>2</sub> = ` +
+          "(" +
+          binTooctM(input_code) +
+          ")<sub>8</sub>";
+        break;
+      }
+
+      case "Binary To Gray": {
+        input_code = new BigNumber(input_code);
+        input_code = input_code.integerValue(BigNumber.ROUND_FLOOR).toString();
+        resultDisplay.innerHTML =
+          `(${input_code})<sub>Binary</sub> = ` +
+          "(" +
+          binTograyM(input_code) +
+          ")<sub>Gray</sub>";
+
+        break;
+      }
+
+      case "Binary To Hexadecimal": {
+        resultDisplay.innerHTML =
+          `(${input_code})<sub>2</sub> = ` +
+          "(" +
+          binTohexM(input_code) +
+          ")<sub>16</sub>";
+
+        break;
+      }
+
+      case "Decimal To Binary": {
+        resultDisplay.innerHTML =
+          `(${input_code})<sub>10</sub> = ` +
+          "(" +
+          dec2binM(input_code) +
+          ")<sub>2</sub>";
+        break;
+      }
+
+      case "Decimal To Hexadecimal": {
+        resultDisplay.innerHTML =
+          `(${input_code})<sub>10</sub> = ` +
+          "(" +
+          decTohexM(input_code) +
+          ")<sub>16</sub>";
+        break;
+      }
+
+      case "Decimal To Octal": {
+        resultDisplay.innerHTML =
+          `(${input_code})<sub>10</sub> = ` +
+          "(" +
+          dec2octM(input_code) +
+          ")<sub>8</sub>";
+        break;
+      }
+
+      case "Gray To Binary": {
+        input_code = new BigNumber(input_code);
+        input_code = input_code.integerValue(BigNumber.ROUND_FLOOR).toString();
+        resultDisplay.innerHTML =
+          `(${input_code})<sub> Gray  </sub> = ` +
+          "(" +
+          grayTobinM(input_code) +
+          ")<sub> Binary</sub>";
+
+        break;
+      }
+
+      case "Octal To Binary": {
+        resultDisplay.innerHTML =
+          `(${input_code})<sub>8</sub> = ` +
+          "(" +
+          octTobinM(input_code) +
+          ")<sub>2</sub>";
+        break;
+      }
+
+      case "Octal To Decimal": {
+        resultDisplay.innerHTML =
+          `(${input_code})<sub>8</sub> = ` +
+          "(" +
+          octTodecM(input_code) +
+          ")<sub>2</sub>";
+        break;
+      }
+
+      case "Octal To Hexadecimal": {
+        resultDisplay.innerHTML =
+          `(${input_code})<sub>8</sub> = ` +
+          "(" +
+          octTohexM(input_code) +
+          ")<sub>16</sub>";
+        break;
+      }
+
+      case "Hexadecimal To Binary": {
+        resultDisplay.innerHTML =
+          `(${input_code})<sub>16</sub> = ` +
+          "(" +
+          hexTobinM(input_code) +
+          ")<sub>2</sub>";
+        break;
+      }
+
+      case "Hexadecimal To Decimal": {
+        resultDisplay.innerHTML =
+          `(${input_code})<sub>16</sub> = ` +
+          "(" +
+          hexTodecM(input_code) +
+          ")<sub>10</sub>";
+        break;
+      }
+
+      case "Hexadecimal To Octal": {
+        resultDisplay.innerHTML =
+          `(${input_code})<sub>16</sub> = ` +
+          "(" +
+          hexTooctM(input_code) +
+          ")<sub>8</sub>";
+        break;
+      }
+
+      case "1's Complement": {
+        resultDisplay.innerHTML =
+          `One's Complement of (${input_code}) = ` +
+          "(" +
+          comp1s(input_code) +
+          ")";
+        break;
+      }
+
+      case "2's Complement": {
+        resultDisplay.innerHTML =
+          `Two's Complement of (${input_code}) = ` +
+          "(" +
+          comp2s(input_code) +
+          ")";
+        break;
       }
     }
-    
-   
-  })
-
-
-  switchmode.addEventListener('pointerdown',()=>{
-    if(mode=='dark')
-    {
-      togglePos.classList.remove('toggleAop');
-      togglePos.classList.add('toggleOp');
-      contmode.classList.add('contLight');
-      headtext.style.color=" rgb(110 74 99)";
-      contmode.classList.remove('contdark');
-      inTake.style.borderColor="purple";
-      inTake.style.color="#5b295b";
-
-      s_Icon.style.color ="rgb(110 74 99)";
-
-
-      mode='light';
-    }
-    else{
-      togglePos.classList.add('toggleAop');
-      togglePos.classList.remove('toggleOp');
-      contmode.classList.remove('contLight');
-      contmode.classList.add('contdark');
-      headtext.style.color="rgb(195, 199, 248)";
-      inTake.style.borderColor='blanchedalmond';
-      s_Icon.style.color ="rgb(195, 199, 248)";
-      inTake.style.color="blanchedalmond";
-      mode='dark';
-    }
-
-  })
-
-
-  ApearSidebar.addEventListener('pointerdown',()=>
-  {
-
-    if( s_barDiv.style.left == '0px')
-    {
-           s_barDiv.style.left="-300px";
-    }
-    else{
-          s_barDiv.style.left= '0px';
-    }
-
-  })
-  
-  if(resultCode=='error')
-  {
-  
-    inTake.style.borderColor='red';
   }
+});
 
+switchmode.addEventListener("pointerdown", () => {
+  if (mode == "dark") {
+    togglePos.classList.remove("toggleAop");
+    togglePos.classList.add("toggleOp");
+    contmode.classList.add("contLight");
+    headtext.style.color = " rgb(110 74 99)";
+    contmode.classList.remove("contdark");
+    inTake.style.borderColor = "purple";
+    inTake.style.color = "#5b295b";
 
- 
+    s_Icon.style.color = "rgb(110 74 99)";
 
+    mode = "light";
+  } else {
+    togglePos.classList.add("toggleAop");
+    togglePos.classList.remove("toggleOp");
+    contmode.classList.remove("contLight");
+    contmode.classList.add("contdark");
+    headtext.style.color = "rgb(195, 199, 248)";
+    inTake.style.borderColor = "blanchedalmond";
+    s_Icon.style.color = "rgb(195, 199, 248)";
+    inTake.style.color = "blanchedalmond";
+    mode = "dark";
+  }
+});
+
+ApearSidebar.addEventListener("pointerdown", () => {
+  if (s_barDiv.style.left == "0px") {
+    s_barDiv.style.left = "-300px";
+  } else {
+    s_barDiv.style.left = "0px";
+  }
+});
+
+if (resultCode == "error") {
+  inTake.style.borderColor = "red";
+}
 
 function errorCall() {
   return (resultCode = "error");
@@ -221,12 +290,9 @@ function errorCall() {
 // function  to extract the fractional part
 
 function extractF(input_code) {
-  // fracPart = 0;
   fracPart = new BigNumber("0");
-
   input_code = new BigNumber(input_code);
 
-  
   if (input_code.isLessThan(1)) {
     fracPart = input_code;
     return fracPart;
@@ -279,7 +345,8 @@ function numAlpha(int_part) {
 function binORoct2Dec(base, input_code) {
   // Binary to Decimal when Base=2
   //Octal to Decimal when Base =8
-
+step=0;
+stepBox.innerHTML = '';
   resultCode = new BigNumber("0");
   //error check validation step;
   if (isNaN(input_code) || input_code < 0) {
@@ -319,17 +386,48 @@ function binORoct2Dec(base, input_code) {
       }
     }
 
+    //changes made here 25 NOvember 2024
+    let previousResultCode = resultCode;
+
     resultCode = resultCode.plus(
       new BigNumber(new BigNumber(base).pow(i)).multipliedBy(
         input_code.modulo(big10)
       )
     );
+    //changes made here 25 NOvember 2024
+    if (resultDetailBox.innerHTML != null) {
+      resultDetailBox.innerHTML = 
+        resultDetailBox.innerHTML +
+        `<div> 
+              <span style="color: black;"> step : 
+        ${++step} ->   
+        </span>
+        ${
+          previousResultCode == 0
+            ? ""
+            : '<span style="color: black;">' +
+              previousResultCode +
+              "</span>" +
+              "  +  "
+        }  ${input_code.modulo(big10)} x ${base}<sup>${i}</sup>   =  ` +
+        '<span style="color: black;">' +
+        resultCode +
+        "</span></div>";
+    }
 
     input_code = input_code
       .dividedBy(big10)
       .integerValue(BigNumber.ROUND_FLOOR);
   }
 
+  if (resultDetailBox.innerHTML != null) {
+    resultDetailBox.innerHTML =
+      resultDetailBox.innerHTML +
+      `<div> <span style="color: black;"> Answer :</span> ` +
+      '<span style="color: green;">' +
+      resultCode+
+      "</span></div>";
+  }
   return resultCode.toString();
 
   // Done Done Binary to decimal;
@@ -338,6 +436,8 @@ function binORoct2Dec(base, input_code) {
 function dec2BinORoct(base, input_code) {
   resultCode = "";
   s_decimal = "";
+  stepBox.innerHTML = '';
+  step=0;
   // error check validation step
   if (isNaN(input_code) == true) {
     //NaN stands not a number;
@@ -359,8 +459,26 @@ function dec2BinORoct(base, input_code) {
 
   for (k = 1; fracPart != 0 && k <= 20; k++) {
     fpartA[k] = fracPart;
+    let previousFracPart=fracPart
     fracPart = base * fracPart;
+    
     s_decimal += Math.trunc(fracPart).toString();
+    if (resultDetailBox.innerHTML != null) {
+      resultDetailBox.innerHTML =
+        resultDetailBox.innerHTML +
+        `<div> 
+                <span style="color: black;"> step : 
+        ${++step} ->   
+        </span>
+       <span style="color: black;">
+       ${ s_decimal ==0 ? "":s_decimal + '  +  ' } 
+        </span>
+        ${previousFracPart} x ${base}  =   ` +
+        '<span style="color: black;">' +
+        fracPart +
+        "</span></div>";
+    }
+
 
     input_code = fracPart;
 
@@ -373,6 +491,17 @@ function dec2BinORoct(base, input_code) {
         break;
       }
     }
+    if (resultDetailBox.innerHTML != null) {
+      resultDetailBox.innerHTML =
+        resultDetailBox.innerHTML +
+        `<div style="color: black;"> 
+     
+       
+      Fractional Part  =  ` +
+        '<span style="color: brown;">' +
+        fracPart +
+        "</span></div>";
+    }
   }
   resultCode = s_decimal;
   s_decimal = "";
@@ -383,12 +512,39 @@ function dec2BinORoct(base, input_code) {
   if (int_part != 0) {
     for (i = 1; int_part >= 1; i++) {
       s_decimal += Math.trunc(int_part % base).toString();
+        //changes made 25 november
+      if (resultDetailBox.innerHTML != null) {
+        resultDetailBox.innerHTML =
+          resultDetailBox.innerHTML +
+          `<div> 
+             <span style="color: black;"> step : 
+        ${++step} ->   
+        </span>
+          ${int_part} % ${base}  =   ` +
+          '<span style="color: black;">' +
+          Math.trunc(int_part % base)+
+          "</span></div>";
+      }
 
+      if (resultDetailBox.innerHTML != null) {
+        resultDetailBox.innerHTML =
+          resultDetailBox.innerHTML +
+          `<div>
+              <span style="color: black;"> step : 
+        ${++step} ->   
+        </span>
+             ${int_part} / ${base}  =   ` +
+          '<span style="color: black;">' +
+          int_part/base +
+          "</span></div>";
+      }
       int_part /= base;
+
     }
     //reversing the string by converting the string to array using split('') and reversing the array using
     // reverse() and re converting the array to string;
     s_decimal = s_decimal.split("").reverse().join("");
+
   } else {
     s_decimal = "0";
   }
@@ -396,10 +552,21 @@ function dec2BinORoct(base, input_code) {
   // concating both conversion float Decimal to binary and int decimal to binary;
   fracPart == 0 ? (carry = "") : (carry = ".");
   resultCode = s_decimal + carry + resultCode;
+  if (resultDetailBox.innerHTML != null) {
+    resultDetailBox.innerHTML =
+      resultDetailBox.innerHTML +
+      `<div> <span style="color: black;"> Answer :</span> ` +
+      '<span style="color: green;">' +
+      resultCode +
+      "</span></div>";
+  }
+
   fpartA = [];
 
   return resultCode;
 }
+
+
 
 function dec2hex(input_code) {
   // resultCode = new BigNumber('0');
@@ -500,7 +667,7 @@ function hex2dec(input_code) {
   //ek zatke me karne wallah code
 
   // resultCode = 0;
-  
+
   resultCode = new BigNumber("0");
   let code_length = input_code.length;
   let position, power;
@@ -582,16 +749,13 @@ function hex2dec(input_code) {
 function bin2gray(input_code) {
   resultCode = input_code[0];
   // input_code=input_code.integerValue().toFixed(0);
-  
+
   for (i = 1; i < input_code.length; i++) {
     if (input_code[i] == input_code[i - 1]) {
       resultCode += "0";
-    }
-    else if( input_code[i] =='.')
-    {
+    } else if (input_code[i] == ".") {
       break;
-    }
-     else {
+    } else {
       resultCode += "1";
     }
 
@@ -615,11 +779,9 @@ function gray2bin(input_code) {
   for (i = 1; i < input_code.length; i++) {
     if (input_code[i] == resultCode[i - 1]) {
       resultCode += "0";
-    }
-    else if( input_code[i] =='.')
-      {
-        break;
-      } else {
+    } else if (input_code[i] == ".") {
+      break;
+    } else {
       resultCode += "1";
     }
     //error check Validation step
@@ -784,92 +946,74 @@ function add1toResult(resultCode) {
 }
 
 // Binary to Decimal
-function binToDecM(input_code)
-{
+function binToDecM(input_code) {
   resultCode = binORoct2Dec(2, input_code);
-return resultCode;
+  return resultCode;
 }
 // Done Done Binary to decimal;
 
 //binary to octal;
 
-function binTooctM(input_code){
+function binTooctM(input_code) {
   input_code = binORoct2Dec(2, input_code);
-//now decimal to octal;
-if (input_code != "error") {
-  resultCode = dec2BinORoct(8, input_code);
+  //now decimal to octal;
+  if (input_code != "error") {
+    resultCode = dec2BinORoct(8, input_code);
+  }
+  return resultCode;
 }
-return resultCode;
-
-}
-
-
 
 //done binary to octal
 
-
-
 //binary to hexadecimal
 
-function binTohexM(input_code)
-  {
-    // first binary to decimal
-input_code = binORoct2Dec(2, input_code);
+function binTohexM(input_code) {
+  // first binary to decimal
+  input_code = binORoct2Dec(2, input_code);
 
-// now decimal to hex
-if (input_code != "error") {
-  resultCode = dec2hex(input_code);
-}
-return resultCode;
+  // now decimal to hex
+  if (input_code != "error") {
+    resultCode = dec2hex(input_code);
   }
+  return resultCode;
+}
 
 //done binary to hexadecimal;
 
-
-
 //doing binary to gray
-function binTograyM(input_code){
+function binTograyM(input_code) {
   resultCode = bin2gray(input_code);
-return resultCode;
-
+  return resultCode;
 }
-
 
 //done binary to gray;
 
 //  Doing decimal to binary
-function dec2binM(input_code)
-{
+function dec2binM(input_code) {
   resultCode = dec2BinORoct(2, input_code);
   return resultCode;
 }
 
 //sucessfully done decimal to binary
 //  Doing decimal to octal
-function dec2octM(inputCode)
-{
+function dec2octM(inputCode) {
   resultCode = dec2BinORoct(8, input_code);
   return resultCode;
-
 }
 //sucessfully done decimal to binary
 
-
-
 //Decimal To Hexadecimal code
-function decTohexM(input_code)
-{
+function decTohexM(input_code) {
   resultCode = dec2hex(input_code);
   return resultCode;
 }
-
 
 // done  float+int decimal to float + normal HexaDecimal;
 //done
 
 //octal to binary
-function octTobinM(input_code)
-{input_code = binORoct2Dec(8, input_code);
+function octTobinM(input_code) {
+  input_code = binORoct2Dec(8, input_code);
 
   //now decimal to binary;
   if (input_code != "error") {
@@ -881,17 +1025,15 @@ function octTobinM(input_code)
 //done octal to binary;
 
 // Octal to Decimal
-function octTodecM(innput_code)
-{
+function octTodecM(innput_code) {
   resultCode = binORoct2Dec(8, input_code);
- return resultCode;
+  return resultCode;
 }
 
 // Done Done Octal to decimal;
 
 //octal to hexadecimal
-function octTohexM(innput_code)
-{
+function octTohexM(innput_code) {
   input_code = "153467";
   //first octal to decimal;
   input_code = binORoct2Dec(8, input_code);
@@ -904,98 +1046,80 @@ function octTohexM(innput_code)
 // Done octal to hexadecimal
 
 //  hexadecimal to Decimal
-function hexTodecM(input_code)
-{
+function hexTodecM(input_code) {
   resultCode = hex2dec(input_code);
   return resultCode;
 }
 //done hex to decimal
 
 //hexadecimal to binary
-function hexTobinM(input_code)
-{
+function hexTobinM(input_code) {
   input_code = hex2dec(input_code);
-//decimal to binary;
-if (input_code != "error") {
-  resultCode = dec2BinORoct(2, input_code);
-}
-return resultCode;
-
+  //decimal to binary;
+  if (input_code != "error") {
+    resultCode = dec2BinORoct(2, input_code);
+  }
+  return resultCode;
 }
 
 //done hex  to binary
 
-
-
 //hexaDecimal to octal
-function hexTooctM(input_code)
-{
+function hexTooctM(input_code) {
   //first hexadecimal to decimal ;
-input_code = hex2dec(input_code);
-//now decimal to octal
-if (input_code != "error") {
-  resultCode = dec2BinORoct(8, input_code);
-}
-return resultCode;
+  input_code = hex2dec(input_code);
+  //now decimal to octal
+  if (input_code != "error") {
+    resultCode = dec2BinORoct(8, input_code);
+  }
+  return resultCode;
 }
 // done hex to oct
 
 //doing Gray to Binary
-function  grayTobinM(input_code)
-{
+function grayTobinM(input_code) {
   resultCode = gray2bin(input_code);
   return resultCode;
 }
 
-
 // doing binary Addition
-function binaddM(input1,input2)
-{
+function binaddM(input1, input2) {
   input1 = "1011";
-input2 = "1110";
+  input2 = "1110";
   resultCode = binAdd(input1, input2);
-resultCode = carry + resultCode;
-return resultCode;
-
+  resultCode = carry + resultCode;
+  return resultCode;
 }
 
 //done addition;
 
 //substraction using one's complement
 
-function subOneM(input1,input2)
-{
+function subOneM(input1, input2) {
   input1 = "10110";
-input2 = "801110";
+  input2 = "801110";
   resultCode = bin_Sub1Comp(input1, input2);
 
-return resultCode;
-
+  return resultCode;
 }
-
 
 // done substraction using one's complement;
 
 // doing substraction  using two's complement
-function subTwoM(input1,input2)
-{
+function subTwoM(input1, input2) {
   input1 = "10110";
   input2 = "01110";
   resultCode = bin_Sub2Comp(input1, input2);
   return resultCode;
 }
 
-function comp1s(innput_code)
-{
-  
-  resultCode= complement(input_code);
+function comp1s(innput_code) {
+  resultCode = complement(input_code);
   return resultCode;
 }
 
-
-function comp2s(innput_code)
-{
-  resultCode= complement(input_code);
+function comp2s(innput_code) {
+  resultCode = complement(input_code);
   resultCode = add1toResult(resultCode);
   return resultCode;
 }
