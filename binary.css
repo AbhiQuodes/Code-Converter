@@ -103,7 +103,7 @@ sub{
 
 #Inoperation{
     position:absolute;
-    top:18vh;
+    top:16vh;
     width:70vmin;
     outline: none;
     height:30px;
@@ -187,9 +187,9 @@ li:hover{
 
 #interact_box{
      /* position: fixed; */
-     min-width:320px;
+     min-width:300px;
     width:90vmin;
-    min-height:325px;
+    min-height:300px;
     max-width:500px;
     position:relative;
 
@@ -253,20 +253,20 @@ li:hover{
 .step-box{
     display:none;
     position:absolute;
-    top:205px;
+    top:25.990125vh;
     background-color: rgb(226, 226, 137);
     color:brown;
     width:30%;
-    min-width:290px;
-    width:88vmin;
-    min-height:280px;
+    min-width:300px;
+    width:90vmin;
+    min-height:275px;
     max-width:460px;
     flex-direction: column;
     align-items: flex-start;
-    padding:20px 10px;
+    padding:05px 10px;
     gap:3px;
     overflow-y: auto;
-    max-height: 200px;
+    max-height: 280px;
 
 
 }
@@ -310,6 +310,15 @@ footer {
     margin-top:20px;
 
 }
+.step-line{
+    border-bottom: 1.5px solid rgb(12, 12, 11);
+    /* min-height: 30px; */
+    height:fit-content;
+    padding-left:20px;
+    padding-bottom: 15px;;
+    display: inline-block;
+    width:100%;
+}
 ::-webkit-scrollbar-track
 {
     box-shadow: inset 0 0 15px rgba(0,0,0,0.5) ;
@@ -317,16 +326,39 @@ footer {
 ::-webkit-scrollbar
 {
     width:2px;
-    
+    height:2px;
 }
 
 ::-webkit-scrollbar-thumb
 {
     background:white;
 }
-@media (min-width:700px)
+@media (min-width:1300px)
 {
     .step-box{
-        top:215px
+        top:215px;
+        max-height: 280px;
+
     }
+    
+#Inoperation{
+
+    top:125px;}
+    #interact_box{
+        min-width:300px;
+        width:90vmin;
+        min-height:320px;
+        max-width:500px;
+    }
+    #cBotton,#intake{
+
+
+        top :-85px;
+    }
+    #resultBox{
+        top:130px;
+        height:150px;
+
+    }
+ 
 }
